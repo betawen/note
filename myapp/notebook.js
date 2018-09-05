@@ -1,17 +1,19 @@
+//import express
 let express = require('express');
-let path = require('path');
-let favicon = require('serve-favicon');
+// let path = require('path');
+// let favicon = require('serve-favicon');
 let logger = require('morgan');
 let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
 let AWS = require("aws-sdk");
 let app = express();
-app.listen(4000, () => console.log('Notepad API listening on port 4000!'))
+
+app.listen(8081, () => console.log('Notepad API listening on port 8081!'))
 AWS.config.update({
     region: "eu-west-2",
     endpoint: "http://localhost:8000"
 });
-let thistable = new AWS.DynamoDB.DocumentClient();
+let table = new AWS.DynamoDB.DocumentClient();
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -31,7 +33,7 @@ app.get('/notepad', (req, res) => { //显示Notepad表中的所有项目信息
             "#updatetime": "updatetime"
         }
     };
-    thistable.scan(params).promise().then((value) => {
+    table.scan(params).promise().then((value) => {
         console.log("find succeeded.");
         return res.send(value)
     })
@@ -55,7 +57,7 @@ app.post('/notepad/add', (req, res) => { //为表增加项目（需要输入名�
             "im": Im
         }
     }
-    thistable.put(params).promise().then((value) => {
+    table.put(params).promise().then((value) => {
         console.log("find succeeded.");
         return res.send("Succeeded")
     })
@@ -75,7 +77,7 @@ app.post('/notepad/delete', (req, res) => { //为表删除一个项目（需要�
             "date": Date
         }
     }
-    thistable.delete(params).promise().then((value) => {
+    table.delete(params).promise().then((value) => {
         console.log("find succeeded.");
         return res.send("Succeeded")
     })
@@ -97,7 +99,7 @@ app.get('/notepad/find_name', (req, res) => { //查找特定名字的项目
             ":name": Name
         }
     };
-    thistable.query(params).promise().then((value) => {
+    table.query(params).promise().then((value) => {
         console.log("find succeeded.");
         return res.send(value)
     })
@@ -118,7 +120,7 @@ app.post('/notepad/find_both', (req, res) => { //查找特定名字和创建时�
             "date": Date
         }
     }
-    thistable.get(params).promise().then((value) => {
+    table.get(params).promise().then((value) => {
         console.log("find succeeded.");
         return res.send(value)
     })
@@ -142,7 +144,7 @@ app.get('/notepad/find_im', (req, res) => { //查找特定重要程度的项目
             ":im": Im
         }
     };
-    thistable.query(params).promise().then((value) => {
+    table.query(params).promise().then((value) => {
         console.log("find succeeded.");
         return res.send(value)
     })
@@ -174,7 +176,7 @@ app.post('/notepad/update', (req, res) => { //更新表中的内容（不清除�
         },
         ReturnValus: "UPDATED_NEW"
     }
-    thistable.update(params).promise().then((value) => {
+    table.update(params).promise().then((value) => {
         console.log("update succeeded.");
         return res.send("Succeeded")
     })
@@ -203,7 +205,7 @@ app.post('/notepad/change_im', (req, res) => { //更新重要程度
         },
         ReturnValus: "UPDATED_NEW"
     }
-    thistable.update(params).promise().then((value) => {
+    table.update(params).promise().then((value) => {
         console.log("change succeeded.");
         return res.send("Succeeded")
     })
@@ -223,7 +225,7 @@ app.get('/notepad/im_paixu', (req, res) => { //根据重要程度由高到低排
             "#im": "im"
         }
     };
-    thistable.scan(params).promise().then((value) => {
+    table.scan(params).promise().then((value) => {
         for (let i = 0; i < value.Count - 1; i++) {
             let min = value.Items[i];
             for (let j = i + 1; j < value.Count; j++) {
