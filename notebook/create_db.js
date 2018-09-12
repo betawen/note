@@ -14,12 +14,12 @@ let params = {//指定表名，主键属性和数据类型
         {AttributeName:"title",KeyType:"RANGE"}
     ],
     AttributeDefinitions:[
-        {AttributeName:"data",AttributeType:"S"},
-        {AttributeName:"title",AttributeType:"s"}
+        {AttributeName:"date",AttributeType:"S"},
+        {AttributeName:"title",AttributeType:"S"}
     ],
     ProvisionedThroughput:{//吞吐量
         ReadCapacityUnits:10,
-        WriteCapasityUnits:10
+        WriteCapacityUnits:10
     }
 };
 dynamodb.createTable(params,function(err,data){
