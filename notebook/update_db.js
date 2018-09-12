@@ -14,7 +14,7 @@ let params={
     GlobalSecondaryIndexUpdates:[
         {
             Create:{
-                IndexName:"index",
+                IndexName:"Index",
                 KeySchema:[
                     {AttributeName:"tags",KeyType:"HASH"},//partiton key
                 ],
@@ -34,5 +34,12 @@ dynamodb.updateTable(params,function(err,data){
         console.log("Unable to update table. Error JSON: ", JSON.stringify(err,null,2));
     }else{
         console.log("Update table.Table description JSON: ", JSON.stringify(err,null,2));
+    }
+});
+dynamodb.describeTable({TableName:"notebook"},(err,data)=>{
+    if(err){
+        console.log("Unable to describe table. Error JSON: ",JSON.stringify(err,null,2));
+    }else{
+        console.log("Describe table. Table description JSON: ",JSON.stringify(data,null,2));
     }
 });
