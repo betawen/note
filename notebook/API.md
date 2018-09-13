@@ -10,6 +10,10 @@ create_table{
 crud
 {
     GET '/'
+    res: redirect for '/allnotes/'
+}
+{
+    GET '/allnotes/'
     res: notes list
 }
 {
@@ -20,6 +24,7 @@ crud
         tags:
     }
     res: now note
+    
 }
 {
     POST '/deletenote/'
@@ -44,7 +49,7 @@ crud
     res: note with the title
 }
 {
-    POST '/update/'
+    POST '/updatenote/'
     send: {
         date:
         title:
