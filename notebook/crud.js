@@ -58,6 +58,9 @@ app.post('/addnote',(req,res)=>{
         },
     };
     console.log("Adding a new item...");
+    if(title==null){
+        res.stringify('REFUSED');
+    }else{
     docClient.put(params,(err,data)=>{
         if(err){
             console.log("Failed to add a new item. Error JSON:",JSON.stringify(err,null,2));
@@ -66,6 +69,7 @@ app.post('/addnote',(req,res)=>{
             res.json(data);
         }
     });
+}
 });
 
 //deletenote
